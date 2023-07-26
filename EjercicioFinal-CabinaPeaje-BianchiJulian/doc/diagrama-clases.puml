@@ -1,0 +1,115 @@
+@startuml
+
+class Autopista {
+	- nombre
+	- <List> estaciones
+	
+	+ addEstacion(codigo, descripcion)
+	+ buscarEstacion(codigoEstacion) : Estacion
+}
+
+class Estacion {
+
+	- static final RANDOM = new Random
+	
+	- codgio
+	- <List> cabinas
+	
+	+ Estacion (codigo, descripcion)
+	
+	+ addCabina(codigoCabina, medioPago)
+	+ dameHoraActual() - RANDOM.nextInt(23)
+	+ buscarCabina(codigoCabina)
+}
+
+class Cabina {
+	- codigo
+	- medioPago
+	- <List> registros
+	- estacion
+	
+	+ Cabina (codigo, medioPago, estacion)
+	
+	+ registrar (vehiculo, estacion.dameHoraActual()) : double
+	
+	- cobrar (vehiculo, hora) : double
+	- cobrar (registro) : double
+}
+
+class Registro {
+	- vehiculo
+	- hora
+	
+	+ Registro (vehiculo, hora)
+}
+
+abstract class MedioPago {
+	- descripcion
+	- diasDemora
+	
+	+ MedioPago(descripcion, diaDemora)
+	
+	+ {abstract} getDescuento()
+	+ getDiasDemora()
+	* setDiasDemora()
+}
+
+class Sube extends MedioPago {
+	- static final String SUBE = SUBE
+
+	+ Sube(diasDemora)
+	+ Sube(descripcion, diasDemora)
+	
+	+ getDescuento()
+	+ setDiasDemora()
+}
+
+class Pase extends MedioPago {
+	- static final String PASE = PASE
+
+	+ Pase(diasDemora)
+	+ Pase(descripcion, diasDemora)
+	
+	+ getDescuento()
+	+ setDiasDemora()
+}
+
+class Efectivo extends MedioPago {
+	- static final String EFECTIVO = EFECTIVO
+
+	+ Efectivo(0)
+	+ Efectivo(descripcion, 0)
+	
+	+ getDescuento()
+}
+
+abstract class Vehiculo {
+	- patente
+	
+	+ Vehiculo (patente)
+	
+	+ {abstract} getTarifa()
+}
+
+class Auto extends Vehiculo {
+	- TARIFA
+	+ getTarifa()
+}
+
+class Camion extends Vehiculo {
+	- TARIFA
+	+ getTarifa()
+}
+
+class Moto extends Vehiculo {
+	- TARIFA
+	+ getTarifa()
+}
+
+Cabina -- MedioPago
+Registro -- Vehiculo
+Cabina "1.." -- "..n" Registro
+Estacion "1.." -- "..n" Cabina
+Autopista  "1.." -- "..n" Estacion
+
+@enduml
